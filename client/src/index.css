@@ -2,6 +2,7 @@
   padding:0;
   margin:0;
   box-sizing: border-box;
+  
 }
 
 .content{
@@ -9,6 +10,7 @@
   margin-top: 10px;
   min-height: 100vh;
   position: relative;
+
 }
 .home-content{
   
@@ -26,13 +28,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 90vh; 
+  height: 100vh; 
+  background-color: #dfe7fe;
 }
 .login-page{
   display: flex;
+  border: solid;
   align-items: center;
-  justify-content: center;
-  height: 90vh; 
+  /* justify-content: center; */
+  align-content : center ;
+  height: 100vh; 
+  background-color: #e5e7f4;
 }
 
 /* transaction page */
@@ -44,6 +50,7 @@
   justify-content: space-between;
   padding: 15px 20px;
   box-shadow: 0 0 2px  black;
+  
 }
 
 
@@ -67,3 +74,24 @@
   align-items: center;
   justify-content: space-between;
 }
+
+
+/* animation of img login-page */
+.animated-image {
+  position: relative;
+  animation-name: slide-from-top;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes slide-from-top {
+  0% {
+      top: -100px;
+      opacity: 0;
+  }
+  100% {
+      top: 0;
+      opacity: 1;
+  }
+}
+

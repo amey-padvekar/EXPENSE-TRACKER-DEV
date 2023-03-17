@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {Container,Box, Typography, TextField, Button, Grid} from "@mui/material"
+import {Container,Box, Typography, TextField, Button, Grid, ImageListItemBar} from "@mui/material"
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import {  toast, ToastContainer } from "react-toastify";
+import image from "../images/banner-img.jpg"
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 // import {LoginSharp} from "@mui/icons-material"
@@ -55,19 +56,20 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div >
       <div className="login-page">
-        <Container component="main" maxWidth="xs">
+        <img className="animated-image" width={"50%"} style={{marginLeft:"100px"}} src={image} ></img>
+        <Container sx={{backgroundColor:"#e8eaf6",borderRadius:"5px",border:"solid thin #abb9ff",boxShadow:"0 0 4px #abb9ff",marginRight:"100px"}}   component="main" maxWidth="xs">
           <Box
             sx={{
-              marginTop: 8,
+              margin:"10px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
             }}
           >
-            <Typography component="h1" variant="h5">
-              Login
+            <Typography sx={{fontFamily:"Roboto, sans-serif",fontSize:"35px"}} component="h1" variant="h5">
+              LOGIN
             </Typography>
             <Box
               component="form"
@@ -81,6 +83,7 @@ const Login = () => {
                 fullWidth
                 id="email"
                 label="Email Address"
+                type="email"
                 name="email"
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -101,10 +104,11 @@ const Login = () => {
                 }}
               />
               <Button
+                
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2, backgroundColor:"#4353b2", }}
               >
                 Sign In
               </Button>
@@ -136,7 +140,7 @@ const Login = () => {
             />
         </Container>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -73,7 +73,9 @@ const BarGraph = ({transactions, incomeTransactions, expenseTransactions, freque
             legend:{
               display:true,
               position:'top'
-            }
+            },
+            
+
           },
         
       };
@@ -104,10 +106,10 @@ const BarGraph = ({transactions, incomeTransactions, expenseTransactions, freque
 
   return (
     <>
-      <div className="card m-2">
+      <div  className="card m-2">
         <div className="card-header">Transaction Graph</div>
         <div className="card-body">
-          <Bar options={options} data={data} />
+          <Bar  options={options} data={data} />
         </div>
       </div>
     </>

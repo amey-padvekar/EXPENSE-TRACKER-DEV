@@ -12,12 +12,7 @@ const PieGraph = ({
 }) => {
 
 
-  window.onbeforeprint = (ev)=>{
-    for(let id in ChartJS.instances){
-      let instance = ChartJS.instances[id];
-      instance.resize(400,500);
-    }
-  }
+ 
 
   const incomeCategory = incomeTransactions.reduce((acc, obj) => {
     const cat = obj.category; // extract the date part
@@ -102,21 +97,39 @@ const PieGraph = ({
 
   return (
     <>
-      <div className="col-md-6 col-print-3">
+      <div style={{display:"flex", flexDirection:"row"}} className="container">
+        <div style={{minWidth:"30%", maxWidth:"50%"}} className="graph1 container-sm  " >
         <div className="card m-2">
           <div className="card-header">Expense by Category</div>
           <div className="card-body">
-            <Pie id="pie1" data={expenseData} />
+            <Pie style={{minWidth:"30%", maxWidth:"95%"}} id="pie1" data={expenseData} />
           </div>
         </div>
-      </div>
-      <div className="col-md-6 col-print-3">
+        </div>
+        <div style={{minWidth:"30%"}} className="graph2 container">
         <div className="card m-2">
+          <div className="card-header">Income by Category</div>
+          <div  className="card-body">
+            <Pie style={{minWidth:"30%", maxWidth:"95%"}} id="" data={incomeData} />
+          </div>
+        </div>
+        </div>
+      </div>
+      <div className="col-sm-4 ">
+        {/* <div className="card m-2">
+          <div className="card-header">Expense by Category</div>
+          <div className="card-body">
+            <Pie  id="pie1" data={expenseData} />
+          </div>
+        </div> */}
+      </div>
+      <div className="col-sm-4 ">
+        {/* <div className="card m-2">
           <div className="card-header">Income by Category</div>
           <div className="card-body">
             <Pie id="" data={incomeData} />
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

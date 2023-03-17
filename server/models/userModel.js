@@ -14,6 +14,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "password is required"],
     },
+    budget:{
+      type: Number
+    },
+    mobile:{
+      type: Number,
+    }
+    
   },
   { timestamps: true }
 );

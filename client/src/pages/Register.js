@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-
+import registerImg from "../images/register.png"
 
 const Register = () => {
   const navigate = useNavigate();
@@ -62,19 +62,20 @@ const Register = () => {
   };
 
   return (
-    <>
+    <div>
       <div className="register-page">
-        <Container component="main" maxWidth="xs">
+      <img className="animated-image" width={"50%"} style={{marginLeft:"100px"}} src={registerImg} ></img>
+        <Container sx={{backgroundColor:"#eaf4fe",borderRadius:"5px",border:"solid thin #abb9ff",boxShadow:"0 0 4px #120878",marginRight:"100px"}}  component="main" maxWidth="xs">
           <Box
             sx={{
-              marginTop: 8,
+              margin:"8px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
             }}
           >
-            <Typography component="h1" variant="h5">
-              Register
+            <Typography sx={{fontFamily:"Roboto, sans-serif",fontSize:"35px"}} component="h1" variant="h5">
+              REGISTER
             </Typography>
             <Box
               component="form"
@@ -123,7 +124,7 @@ const Register = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2, backgroundColor:"#fd796d" }}
               >
                 Sign Up
               </Button>
@@ -155,7 +156,7 @@ const Register = () => {
           </Box>
         </Container>
       </div>
-    </>
+    </div>
   );
 };
 

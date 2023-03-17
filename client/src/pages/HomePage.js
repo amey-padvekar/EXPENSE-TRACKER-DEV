@@ -41,8 +41,11 @@ import TransactionTable from "../Components/TransactionTable";
 import Analytics from "../Components/Analytics";
 import { Container } from "@mui/system";
 import TransactionList from "../Components/TransactionList";
+import BudgetButton from "../Components/BudgetButton";
 
 const HomePage = () => {
+  let profile;
+  const [budget,setBudget] = useState()
   const [open, setOpen] = useState(false);
   const [allTransaction, setAllTransaction] = useState([]);
   const [title, setTitle] = useState("");
@@ -56,6 +59,7 @@ const HomePage = () => {
   const [filterType, setFilterType] = useState("all");
   const [viewState, setViewState] = useState("table");
   const [edit, setEdit] = useState(false);
+  const [monthExpense,setMonthExpense] =useState();
   const [selectedDate, setSelectedDate] = useState({
     startDate: "",
     endDate: "",
@@ -69,6 +73,62 @@ const HomePage = () => {
     incurredOn: "",
     note: "",
   });
+
+  function getCurrentMonthDates() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const lastDayOfMonth = new Date(year, month, 0).getDate();
+    const startDate = new Date(`${month}/01/${year}`);
+    const endDate = new Date(`${month}/${lastDayOfMonth}/${year}`);
+    return {
+      startDate,
+      endDate
+    };
+  }
+  function totalExpense(expenseTransactions) {
+    let total = 0;
+    expenseTransactions.forEach((element) => {
+      total = total + Number(element.amount);
+    });
+    return total;
+  }
+  //usage
+ 
+  // console.log(currentMonthDates.startDate); // Output: e.g. "Fri Mar 01 2023 00:00:00 GMT+0000 (Coordinated Universal Time)"
+  // console.log(currentMonthDates.endDate); // Output: e.g. "Sun Mar 31 2023 00:00:00 GMT+0000 (Coordinated Universal Time)"
+
+  
+  const checkBudget = async()=>{
+    const currentMonthDates = getCurrentMonthDates();
+    const profile = JSON.parse(localStorage.getItem("profileData"));
+    try {
+      const {data} = await axios.post("/transactions/get-transaction", {
+        userId: profile._id,
+        frequency:"custom",
+        selectedDate:currentMonthDates,
+        filterType:"expense"
+      });
+      const monthlyExpense = totalExpense(data);
+      setMonthExpense(monthlyExpense);
+      
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+
+
+  const handleBudget = async(value)=>{
+    setBudget(value);
+    const profile = JSON.parse(localStorage.getItem("profileData"));
+    await axios.post("/users/update-user", {
+      payload: { budget: value },
+      userId: profile._id,
+    });
+    
+  }
   // geting all transactions of user
 
   // calling function to fetch transactions
@@ -85,7 +145,7 @@ const HomePage = () => {
           filterType,
         });
         setAllTransaction(res.data);
-        console.log(res.data);
+        
       } catch (error) {
         console.log(error);
         toast.error("Failed to fetch transaction", {
@@ -101,10 +161,38 @@ const HomePage = () => {
       }
     };
     getAllTransaction();
+    checkBudget();
+    profile = localStorage.getItem("profileData")
+    if(profile && budget!==0){
+      setBudget(profile.budget)
+    }
+    
+
+   
+    
+
+
+    
   }, [frequency, selectedDate, filterType, open]);
+
+  async function getTotalIncome(transactions) {
+    let totalIncome = 0;
+  
+    for (let i = 0; i < transactions.length; i++) {
+      const transaction = transactions[i];
+  
+      if (transaction.type === "income") {
+        totalIncome += transaction.amount;
+      }
+    }
+  
+    return totalIncome;
+  }
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const newTransaction = {
       title: title,
       amount: amount,
@@ -114,8 +202,21 @@ const HomePage = () => {
       note: note,
       incurredOn: incurredOn,
     };
+    const profile = JSON.parse(localStorage.getItem("profileData"));
+    console.log(profile.budget);
+    const localBudget = profile.budget
+    console.log(Number(monthExpense) + Number(newTransaction.amount));
+      const newTotal = Number(monthExpense) + Number(newTransaction.amount);
+      console.log(newTotal)
+    
+    if(localBudget > newTotal  && newTransaction.type !== "expense"){
+
+    
+   
+
     try {
       const user = JSON.parse(localStorage.getItem("user"));
+
       if (edit) {
         await axios.post("/transactions/edit-transaction", {
           payload: { ...newTransaction, userId: user._id },
@@ -147,6 +248,9 @@ const HomePage = () => {
           theme: "light",
         });
       }
+    
+
+    
 
       setOpen(false);
     } catch (error) {
@@ -162,6 +266,21 @@ const HomePage = () => {
         theme: "light",
       });
     }
+  }
+  else{
+    
+    toast.error("overbudget", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    setOpen(false);
+  }
   };
 
   const handleDelete = async (transaction) => {
@@ -222,10 +341,11 @@ const HomePage = () => {
   }
 
   return (
+    <div style={{backgroundColor:"#e8eaf6"}}>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Layout>
         <Container sx={{}} maxWidth="xl">
-          <div className="filters">
+          <div style={{backgroundColor:"white"}} className="filters">
             <div className="date-filter" style={{ display: "flex" }}>
               {/* <Typography
                 marginTop={"5px"}
@@ -345,7 +465,10 @@ const HomePage = () => {
               >
                 Add new
               </Button>
+              
+              <BudgetButton handleBudget={handleBudget} />
             </div>
+            
           </div>
           <div className="home-content card">
             <div
@@ -353,7 +476,7 @@ const HomePage = () => {
               style={{ alignItems: "center" }}
             >
               <Typography component={"h1"} variant="h4" align="center">
-                Transactions
+                TRANSACTIONS
               </Typography>
               {/* <h2 style={{}} >Transactions</h2> */}
             </div>
@@ -373,7 +496,7 @@ const HomePage = () => {
                     );
                   }
                   case "analytics": {
-                    return <Analytics frequency={frequency} transactions={allTransaction} />;
+                    return <Analytics budget={budget} frequency={frequency} transactions={allTransaction} />;
                   }
                   case "list": {
                     return (
@@ -448,6 +571,7 @@ const HomePage = () => {
                   type="number"
                   onChange={(e) => {
                     setAmount(e.target.value);
+                    
                   }}
                   autoFocus
                   style={{ flexGrow: "1" }}
@@ -549,6 +673,7 @@ const HomePage = () => {
         </Dialog>
       </Layout>
     </LocalizationProvider>
+    </div>
   );
 };
 

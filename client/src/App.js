@@ -1,5 +1,6 @@
 import {Routes,Route, Navigate} from "react-router-dom"
 import './App.css';
+import Profile from "./Components/Profile";
 import ResetPassword from "./Components/ResetPassword";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
@@ -14,6 +15,8 @@ function App() {
         <Route exact path="/register" element={<Register/>} />
         <Route exact path="/login" element={<Login/>} />
         <Route exact path="/reset" element={<ResetPassword/>} />
+        <Route exact path="/profile" element={<ProtectedRoutes><Profile/></ProtectedRoutes>} />
+
       </Routes>
     </>
   );
