@@ -35,7 +35,7 @@ const Register = () => {
     };
 
     try {
-      await axios.post("/users/register", newUser);
+      const {data,error} = await axios.post("/users/register", newUser);
       toast.success("Registration Successfull", {
         position: "top-center",
         autoClose: 5000,
@@ -48,6 +48,22 @@ const Register = () => {
       });
       navigate('/login')
     } catch (error) {
+      // console.log(error.response.data.error.code)
+      if(error.response.data.error.code === 11000){
+        toast.error("Email already registered", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });  
+      }
+      else{
+
+      
       toast.error("Registration Failed", {
         position: "top-center",
         autoClose: 5000,
@@ -58,6 +74,7 @@ const Register = () => {
         progress: undefined,
         theme: "light",
       });
+    }
     }
   };
 
