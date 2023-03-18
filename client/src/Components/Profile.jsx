@@ -24,7 +24,9 @@ function Profile({handleConfirm, editState}) {
       }
     };
     getUser();
-    console.log(user)
+
+    
+    // console.log(user)
   }, [editState]);
 
   //seting profile
