@@ -55,12 +55,7 @@ const BarGraph = ({transactions, incomeTransactions, expenseTransactions, freque
         acc[date] += obj.amount; // add the amount to the accumulator for the date
         return acc;
       }, {});
-      useEffect(()=>{
-        console.log(expense);
-        console.log(income)
-        console.log(dates);
-        console.log(labels.map(date => income["2023-03-12"] || 0))
-      },[])
+      
 
     const options = {
         responsive: true,

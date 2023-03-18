@@ -34,6 +34,7 @@ const TransactionTable = ({ transactions, handleEdit, handleDelete }) => {
             </TableRow>
           </TableHead>
           <TableBody>
+
             {transactions.map((transaction, index) => (
               <TableRow
                 key={index}
@@ -58,6 +59,7 @@ const TransactionTable = ({ transactions, handleEdit, handleDelete }) => {
                 </TableCell>
               </TableRow>
             ))}
+            
           </TableBody>
         </Table>
       </TableContainer>

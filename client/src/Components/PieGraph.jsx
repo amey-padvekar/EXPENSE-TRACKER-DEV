@@ -10,10 +10,6 @@ const PieGraph = ({
   expenseTransactions,
   frequency,
 }) => {
-
-
- 
-
   const incomeCategory = incomeTransactions.reduce((acc, obj) => {
     const cat = obj.category; // extract the date part
     if (!acc[cat]) {

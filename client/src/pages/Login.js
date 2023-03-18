@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
-import {Container,Box, Typography, TextField, Button, Grid, ImageListItemBar} from "@mui/material"
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  ImageListItemBar,
+} from "@mui/material";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import {  toast, ToastContainer } from "react-toastify";
-import image from "../images/banner-img.jpg"
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import image from "../images/banner-img.jpg";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 // import {LoginSharp} from "@mui/icons-material"
 
@@ -11,23 +19,23 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
 
   //prevent login user to register
-  useEffect(()=>{
-    if(localStorage.getItem("user")){
-      navigate("/")
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      navigate("/");
     }
-  },[navigate])
+  }, [navigate]);
 
-
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const User = {
       email: email,
       password: password,
     };
     try {
-      const {data} = await axios.post("/users/login",User);
+      const { data } = await axios.post("/users/login", User);
       toast.success("Login Successfull", {
         position: "top-center",
         autoClose: 5000,
@@ -38,47 +46,62 @@ const Login = () => {
         progress: undefined,
         theme: "light",
       });
-      localStorage.setItem('user',JSON.stringify({...data.user,password:""}))
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...data.user, password: "" })
+      );
       // setTimeout(()=>navigate("/"),2000);
-      navigate("/")
+      navigate("/");
     } catch (error) {
-
-        toast.error("Login Failed", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      
+      toast.error("Login Failed", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
   return (
-    <div >
+    <div>
       <div className="login-page">
-        <img className="animated-image" width={"50%"} style={{marginLeft:"100px"}} src={image} ></img>
-        <Container sx={{backgroundColor:"#e8eaf6",borderRadius:"5px",border:"solid thin #abb9ff",boxShadow:"0 0 4px #abb9ff",marginRight:"100px"}}   component="main" maxWidth="xs">
+        <img
+          className="animated-image"
+          width={"50%"}
+          style={{ marginLeft: "100px" }}
+          src={image}
+        ></img>
+        <Container
+          sx={{
+            backgroundColor: "#e8eaf6",
+            borderRadius: "5px",
+            border: "solid thin #abb9ff",
+            boxShadow: "0 0 4px #abb9ff",
+            marginRight: "100px",
+          }}
+          component="main"
+          maxWidth="xs"
+        >
           <Box
             sx={{
-              margin:"10px",
+              margin: "10px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
             }}
           >
-            <Typography sx={{fontFamily:"Roboto, sans-serif",fontSize:"35px"}} component="h1" variant="h5">
+            <Typography
+              sx={{ fontFamily: "Roboto, sans-serif", fontSize: "35px" }}
+              component="h1"
+              variant="h5"
+            >
               LOGIN
             </Typography>
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}
-            >
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -102,15 +125,25 @@ const Login = () => {
                 id="password"
                 autoComplete="current-password"
                 onChange={(e) => {
-                  setPassword(e.target.value);
+                  const value = e.target.value;
+                  setPassword(value);
+
+                  if (value.length < 8) {
+                    setPasswordError(true);
+                  } else {
+                    setPasswordError(false);
+                  }
                 }}
+                error={passwordError}
+                helperText={
+                  passwordError ? "Password must be at least 8 characters" : ""
+                }
               />
               <Button
-                
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2, backgroundColor:"#4353b2", }}
+                sx={{ mt: 3, mb: 2, backgroundColor: "#4353b2" }}
               >
                 Sign In
               </Button>
@@ -121,7 +154,7 @@ const Login = () => {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link to={"/register"}  variant="body2">
+                  <Link to={"/register"} variant="body2">
                     {"Don't have an account? Register"}
                   </Link>
                 </Grid>
@@ -129,17 +162,17 @@ const Login = () => {
             </Box>
           </Box>
           <ToastContainer
-              position="top-center"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-            />
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </Container>
       </div>
     </div>

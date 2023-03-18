@@ -50,7 +50,7 @@ const HomePage = () => {
   const [allTransaction, setAllTransaction] = useState([]);
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState("expense");
   const [category, setCategory] = useState("");
   const [reference, setReference] = useState("");
   const [note, setNote] = useState("");
@@ -127,8 +127,6 @@ const HomePage = () => {
 
   // calling function to fetch transactions
   useEffect(() => {
-    console.log(selectedDate);
-    console.log(filterType);
     const getAllTransaction = async () => {
       try {
         const user = JSON.parse(localStorage.getItem("user"));
@@ -177,7 +175,6 @@ const HomePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const newTransaction = {
       title: title,
       amount: amount,
@@ -194,7 +191,6 @@ const HomePage = () => {
     const newTotal = Number(monthExpense) + Number(newTransaction.amount);
     console.log(newTotal);
     if (localBudget < newTotal && newTransaction.type === "expense") {
-      console.log("if condition");
       toast.error("overbudget", {
         position: "top-center",
         autoClose: 5000,
@@ -209,7 +205,6 @@ const HomePage = () => {
     } else {
       try {
         const user = JSON.parse(localStorage.getItem("user"));
-
         if (edit) {
           await axios.post("/transactions/edit-transaction", {
             payload: { ...newTransaction, userId: user._id },
@@ -241,7 +236,6 @@ const HomePage = () => {
             theme: "light",
           });
         }
-
         setOpen(false);
       } catch (error) {
         console.log(error);
@@ -256,13 +250,7 @@ const HomePage = () => {
           theme: "light",
         });
       }
-
-      
-      // setOpen(false);
-
-      console.log("else condition");
     }
-
   };
   
 
@@ -488,6 +476,7 @@ const HomePage = () => {
                     case "analytics": {
                       return (
                         <Analytics
+                          monthExpense={monthExpense}
                           budget={budget}
                           frequency={frequency}
                           transactions={allTransaction}
@@ -577,6 +566,7 @@ const HomePage = () => {
                         required
                         labelId="type-selector"
                         id="type-selector"
+                        defaultValue="expense"
                         value={type}
                         name="type"
                         sx={{ height: 55 }}

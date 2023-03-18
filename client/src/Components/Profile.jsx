@@ -74,13 +74,10 @@ function Profile({handleConfirm, editState}) {
       {!editState ? (
         <Grid
           container
-          direction="column"
-          
+          direction="column"    
           alignItems="center"
         >
-          <Avatar alt="User Avatar" src="#" />
-          
-          <Typography sx={{width:"50%"}} variant="h4">username: {user.username}</Typography>
+          <Typography sx={{width:"50%"}} variant="h6">username: {user.username}</Typography>
           <Typography sx={{width:"50%"}} variant="subtitle1">email: {user.email}</Typography>
           <Typography sx={{width:"50%"}} variant="h6">
             Mobile No: {!user.mobile ? " - - " : user.mobile}
@@ -96,11 +93,13 @@ function Profile({handleConfirm, editState}) {
           </Typography>
         </Grid>
       ) : (
-        <Grid sx={{width:"40"}} container  direction="column" alignItems="center">
+        <Grid onSubmit={(e)=>{handleSubmit(e); handleConfirm();}} component={"form"}  sx={{width:"40"}} container  direction="column" alignItems="center">
           <Avatar className="m-2" alt="User Avatar" src="#" />
 
           <TextField
+            required
             sx={{width:"50%"}}
+            
             defaultValue={user.username}
             className="m-1"
             variant="standard"
@@ -114,6 +113,7 @@ function Profile({handleConfirm, editState}) {
           <Typography sx={{width:"50%"}} className="m-1" variant="subtitle1">email: {user.email}</Typography>
 
           <TextField
+          required
             sx={{width:"50%"}}
             defaultValue={!user.mobile ? "" : user.mobile}
             variant="standard"
@@ -127,6 +127,7 @@ function Profile({handleConfirm, editState}) {
           <TextField
           sx={{width:"50%"}}
             variant="standard"
+            required
             defaultValue={!user.budget ? 0 : user.budget}
             size="small"
             name="budget"
@@ -135,17 +136,17 @@ function Profile({handleConfirm, editState}) {
             onChange={(e)=>{setBudget(e.target.value)}}
           />
 
-          <Typography sx={{width:"50%"}} variant="h6">Statistics</Typography>
+          {/* <Typography sx={{width:"50%"}} variant="h6">Statistics</Typography> */}
           <Typography sx={{width:"50%"}} variant="body1">
             Created all: {new Date(user.createdAt).toLocaleDateString()}
             <br></br>
             Upadated at: {new Date(user.updatedAt).toLocaleDateString()}
           </Typography>
           <Button
-          on
+            type="submit"
             onClick={(e) => {
-              handleSubmit(e);
-              handleConfirm();
+              // handleSubmit(e);
+              // handleConfirm();
             }}
           >
             Confirm
